@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="220.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mz.Controller">
+   <children>
+      <Label layoutX="15.0" layoutY="32.0" prefHeight="17.0" prefWidth="485.0" text="Выберите файл с исходными данными:" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" />
+      <TextField fx:id="filePath" layoutX="15.0" layoutY="49.0" prefHeight="25.0" prefWidth="397.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="88.0" />
+      <Button alignment="CENTER_RIGHT" layoutX="423.0" layoutY="49.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#chooseFile" text="Выбрать" AnchorPane.rightAnchor="14.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></Button>
+      <Button layoutX="435.0" layoutY="181.0" mnemonicParsing="false" onAction="#close" text="Выход" AnchorPane.rightAnchor="14.0" />
+      <Button layoutX="364.0" layoutY="181.0" mnemonicParsing="false" onAction="#start" text="Начать" AnchorPane.rightAnchor="81.0" />
+      <Label layoutX="15.0" layoutY="93.0" text="Выберите файл с данными из Primavera:" />
+      <TextField fx:id="filePrimaPath" layoutX="14.0" layoutY="110.0" prefHeight="25.0" prefWidth="397.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="89.0" />
+      <Button layoutX="423.0" layoutY="110.0" mnemonicParsing="false" onAction="#choosePrima" text="Выбрать" AnchorPane.rightAnchor="14.0" />
+   </children>
+</AnchorPane>

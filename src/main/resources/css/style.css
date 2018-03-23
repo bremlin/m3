@@ -1,0 +1,12 @@
+.listCellUse {
+    -fx-text-fill: green;
+}
+
+.listCellUse:selected {
+    -fx-text-fill: white;
+    -fx-background-color: #7b87dc;
+}
+
+.test {
+    -fx-text-fill: red;
+}
