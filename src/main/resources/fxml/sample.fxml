@@ -7,6 +7,20 @@
 
 <AnchorPane prefHeight="220.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mz.Controller">
    <children>
+      <MenuBar layoutX="38.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Настройки">
+               <items>
+                  <Menu mnemonicParsing="false" text="Вид PV">
+                     <items>
+                        <RadioMenuItem fx:id="radioPvM3" mnemonicParsing="false" onAction="#pvTypeChange" selected="true" text="М3 PV" />
+                        <RadioMenuItem fx:id="radioPvStandart" mnemonicParsing="false" onAction="#pvTypeChange" text="Стандартный набор PV" />
+                     </items>
+                  </Menu>
+               </items>
+          </Menu>
+        </menus>
+      </MenuBar>
       <Label layoutX="15.0" layoutY="32.0" prefHeight="17.0" prefWidth="485.0" text="Выберите файл с исходными данными:" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="0.0" />
       <TextField fx:id="filePath" layoutX="15.0" layoutY="49.0" prefHeight="25.0" prefWidth="397.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="88.0" />
       <Button alignment="CENTER_RIGHT" layoutX="423.0" layoutY="49.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#chooseFile" text="Выбрать" AnchorPane.rightAnchor="14.0">

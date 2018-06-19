@@ -10,9 +10,12 @@ import java.util.Date;
 
 public class FinPeriod {
 
+    private String monthPeriod;
     private String name;
     private Date startDate;
     private Date finishDate;
+
+    private Date thursday;
 
     public FinPeriod(Cell cell) {
         this.name = cell.getStringCellValue();
@@ -52,6 +55,25 @@ public class FinPeriod {
             }
         }
         this.startDate = canlendarStart.getTime();
+
+        //Разнесение финпериодов по месяцам по правилу четверга (месяц считается тем, куда входит четверг)
+        int yearStart = canlendarStart.get(Calendar.YEAR);
+        int monthStart = canlendarStart.get(Calendar.MONTH);
+        int dayStart = canlendarStart.get(Calendar.DAY_OF_MONTH);
+
+        if (dayStart < 25) {
+            monthPeriod = (monthStart + 1) + "." + yearStart;
+        } else {
+            if (canlendarStart.getActualMaximum(Calendar.DAY_OF_MONTH) - dayStart > 2) {
+                monthPeriod = (monthStart + 1) + "." + yearStart;
+            } else {
+                if (monthStart > 10) {
+                    monthPeriod = 1 + "." + (yearStart + 1);
+                } else {
+                    monthPeriod = (monthStart + 2) + "." + yearStart;
+                }
+            }
+        }
     }
 
     public String getName() {
@@ -60,6 +82,10 @@ public class FinPeriod {
 
     public Date getStartDate() {
         return startDate;
+    }
+
+    public String getMonthPeriod() {
+        return monthPeriod;
     }
 
     public Date getFinishDate() {

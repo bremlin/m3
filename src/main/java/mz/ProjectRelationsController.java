@@ -30,6 +30,8 @@ public class ProjectRelationsController implements Initializable{
     @FXML
     public ListView listFromPrima;
     @FXML
+    public ListView primaObjectList;
+    @FXML
     public ListView excelProject;
     @FXML
     public ListView excelPeredel;
@@ -80,6 +82,7 @@ public class ProjectRelationsController implements Initializable{
         primaContractor.setCellFactory(param -> new ContractorFormatCell());
         xlsContractor.setCellFactory(param -> new ContractorFormatCell());
         listFromPrima.setCellFactory(param -> new ContractorFormatCell());
+        excelProject.setCellFactory(param -> new ContractorFormatCell());
     }
 
     private void fillData(XLSReaderSource xlsReaderSource, File file) {
@@ -92,7 +95,7 @@ public class ProjectRelationsController implements Initializable{
         if (rrcObject.size() > 0) projectRelationsMap = rrcObject;
 
         ArrayList<MzListItem> primaProjectsName = new ArrayList<>();
-        for (String name : primaHelper.getProjectObjectName()) {
+        for (String name : primaHelper.getProjectsList()) {
             if (projectRelationsMap.containsKey(name)) {
                 primaProjectsName.add(new MzListItem(name, true));
             } else {
@@ -109,7 +112,7 @@ public class ProjectRelationsController implements Initializable{
             boolean flag = false;
             for (ArrayList<String> list : projectRelationsMap.values()) {
                 for (String s : list) {
-                    if (projectName.equals(s)) flag = true;
+                    if (s.contains(projectName)) flag = true;
                 }
             }
             if (flag) {
@@ -153,18 +156,24 @@ public class ProjectRelationsController implements Initializable{
     public void doMagic(ActionEvent actionEvent) {
         if (tabObjects.isSelected()) {
 
-            String xlsProjectNameSelect = (String) excelProject.getSelectionModel().getSelectedItem();
+            MzListItem xlsProjectNameSelectMz = (MzListItem) excelProject.getSelectionModel().getSelectedItem();
             String xlsPeredelNameSelect = (String) excelPeredel.getSelectionModel().getSelectedItem();
+
+            String xlsProjectNameSelect = xlsProjectNameSelectMz.getName();
 
             if (listFromPrima.getSelectionModel().getSelectedItems().size() > 0) {
                 for (Object primaProjectName : listFromPrima.getSelectionModel().getSelectedItems()) {
                     MzListItem ppn = (MzListItem) primaProjectName;
-                    if (projectRelationsMap.containsKey(ppn.getName())) {
-                        projectRelationsMap.get(ppn.getName()).add(xlsProjectNameSelect + xlsPeredelNameSelect);
+                    String pol = (String) primaObjectList.getSelectionModel().getSelectedItem();
+
+                    String primaKey = ppn.getName() + "-" + pol;
+
+                    if (projectRelationsMap.containsKey(primaKey)) {
+                        projectRelationsMap.get(primaKey).add(xlsProjectNameSelect + xlsPeredelNameSelect);
                     } else {
                         ArrayList<String> tempList = new ArrayList<>();
                         tempList.add(xlsProjectNameSelect + xlsPeredelNameSelect);
-                        projectRelationsMap.put(ppn.getName(), tempList);
+                        projectRelationsMap.put(primaKey, tempList);
 
                     }
                     ppn.setUseProperty(true);
@@ -195,8 +204,11 @@ public class ProjectRelationsController implements Initializable{
         WritePFact writePFact = new WritePFact(file, xlsReaderSource.getWorkbook());
         try {
 //            writePFact.writeChFactPeriod(xlsReaderSource.getChFacts());
+            writePFact.writeAFTVRMonth(xlsReaderSource.getChFacts(), projectRelationsListMap, contractorRelationsMap,
+                    xlsReaderSource.getContractorHelper(), primaHelper);
             writePFact.writeAFTVR(xlsReaderSource.getChFacts(), projectRelationsListMap, contractorRelationsMap,
                     xlsReaderSource.getContractorHelper(), primaHelper);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -217,12 +229,24 @@ public class ProjectRelationsController implements Initializable{
     }
 
     public void projectClick(MouseEvent mouseEvent) {
-        String selectedProject = (String) excelProject.getSelectionModel().getSelectedItem();
+        ListView templList = (ListView) mouseEvent.getSource();
+        MzListItem selectedProject;
 
-        ChFactHelper chFactHelper = xlsReaderSource.getChFacts();
-        ArrayList<String> xlsPeredelNames = chFactHelper.getPeredelNameSet(selectedProject);
-        excelPeredel.getItems().removeAll();
-        excelPeredel.getItems().setAll(xlsPeredelNames);
+        if (templList == excelProject) {
+            selectedProject = (MzListItem) excelProject.getSelectionModel().getSelectedItem();
+
+            ChFactHelper chFactHelper = xlsReaderSource.getChFacts();
+            ArrayList<String> xlsPeredelNames = chFactHelper.getPeredelNameSet(selectedProject.getName());
+            excelPeredel.getItems().removeAll();
+            excelPeredel.getItems().setAll(xlsPeredelNames);
+        } else if (templList == listFromPrima) {
+            selectedProject = (MzListItem) listFromPrima.getSelectionModel().getSelectedItem();
+
+            ArrayList<String> primaStageNames = primaHelper.getPrimaObjectList(selectedProject.getName());
+            primaObjectList.getItems().removeAll();
+            primaObjectList.getItems().setAll(primaStageNames);
+        }
+
     }
 
     public void done(ActionEvent actionEvent) {

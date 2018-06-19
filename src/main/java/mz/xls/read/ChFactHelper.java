@@ -13,7 +13,9 @@ import java.util.HashSet;
 public class ChFactHelper extends ArrayList<ChFact> {
 
     private HashMap<FinPeriod, HashMap<String, Integer>> hashPeriod = new HashMap<>();
+    private HashMap<String, HashMap<String, Integer>> hashMonthPeriod = new HashMap<>();
     private HashMap<FinPeriod, ArrayList<ChFact>> chFactHash = new HashMap<>();
+    private HashMap<String, ArrayList<ChFact>> chFactMonthHash = new HashMap<>();
 
     private HashSet<String> projectNameSet = new HashSet<>();
     private HashMap<String, HashSet<String>> peredelNameHashMap = new HashMap<>();
@@ -87,6 +89,24 @@ public class ChFactHelper extends ArrayList<ChFact> {
                 factArrayList.add(chFact);
                 chFactHash.put(chFact.getPeriod(), factArrayList);
             }
+
+            if (hashMonthPeriod.containsKey(chFact.getPeriod().getMonthPeriod())) {
+                if (hashMonthPeriod.get(chFact.getPeriod().getMonthPeriod()).containsKey(chFactKeyFull)) {
+                    Integer fact = hashMonthPeriod.get(chFact.getPeriod().getMonthPeriod()).get(chFactKeyFull) + chFact.getFact();
+                    hashMonthPeriod.get(chFact.getPeriod().getMonthPeriod()).put(chFactKeyFull, fact);
+                } else {
+                    chFactMonthHash.get(chFact.getPeriod().getMonthPeriod()).add(chFact);
+                    hashMonthPeriod.get(chFact.getPeriod().getMonthPeriod()).put(chFactKeyFull, chFact.getFact());
+                }
+            } else {
+                HashMap<String, Integer> hashFacts = new HashMap<>();
+                hashFacts.put(chFactKeyFull, chFact.getFact());
+                hashMonthPeriod.put(chFact.getPeriod().getMonthPeriod(), hashFacts);
+
+                ArrayList<ChFact> factArrayList = new ArrayList<>();
+                factArrayList.add(chFact);
+                chFactMonthHash.put(chFact.getPeriod().getMonthPeriod(), factArrayList);
+            }
         }
     }
 
@@ -96,6 +116,14 @@ public class ChFactHelper extends ArrayList<ChFact> {
 
     public HashMap<FinPeriod, ArrayList<ChFact>> getChFactHash() {
         return chFactHash;
+    }
+
+    public HashMap<String, HashMap<String, Integer>> getHashMonthPeriod() {
+        return hashMonthPeriod;
+    }
+
+    public HashMap<String, ArrayList<ChFact>> getChFactMonthHash() {
+        return chFactMonthHash;
     }
 
     public ArrayList<String> getProjectNameSet() {

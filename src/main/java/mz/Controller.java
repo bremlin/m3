@@ -3,6 +3,7 @@ package mz;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,6 +19,11 @@ public class Controller {
     @FXML
     public TextField filePrimaPath;
 
+    @FXML
+    public RadioMenuItem radioPvM3;
+    @FXML
+    public RadioMenuItem radioPvStandart;
+
     private File file;
     private File filePrima;
 
@@ -25,12 +31,14 @@ public class Controller {
 
     private String directory;
 
+    private boolean pvStandart = false;
+
     public void close() {
         System.exit(0);
     }
 
     public void start(ActionEvent actionEvent) {
-        xlsReaderSource = new XLSReaderSource(file, filePrima);
+        xlsReaderSource = new XLSReaderSource(file, filePrima, pvStandart);
         Node source = (Node)  actionEvent.getSource();
         Stage stage  = (Stage) source.getScene().getWindow();
         stage.close();
@@ -72,5 +80,24 @@ public class Controller {
 
     public File getFile() {
         return file;
+    }
+
+    public void pvTypeChange(ActionEvent actionEvent) {
+        RadioMenuItem tempItem = (RadioMenuItem) actionEvent.getSource();
+        if (tempItem.getId().equals("radioPvStandart")) {
+            if (radioPvStandart.isSelected()) {
+                radioPvM3.setSelected(false);
+            } else {
+                radioPvStandart.setSelected(true);
+            }
+            pvStandart = true;
+        } else {
+            if (radioPvM3.isSelected()) {
+                radioPvStandart.setSelected(false);
+            } else {
+                radioPvM3.setSelected(true);
+            }
+            pvStandart = false;
+        }
     }
 }

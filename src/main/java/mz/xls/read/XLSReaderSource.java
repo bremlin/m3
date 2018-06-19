@@ -18,7 +18,7 @@ public class XLSReaderSource {
     private FinPeriodHelper finPeriodHelper;
     private ContractorHelper contractorHelper;
 
-    public XLSReaderSource(File file, File prima) {
+    public XLSReaderSource(File file, File prima, boolean pvStandart) {
 
         try {
             FileInputStream excelFile = new FileInputStream(file);
@@ -30,7 +30,7 @@ public class XLSReaderSource {
             FileInputStream primaFile = new FileInputStream(prima);
             Workbook workbookPrima = new XSSFWorkbook(primaFile);
 
-            xlsReaderPrimavera = new XLSReaderPrimavera(workbookPrima);
+            xlsReaderPrimavera = new XLSReaderPrimavera(workbookPrima, pvStandart);
 
             finPeriodHelper = xlsReaderPrimavera.getFinPeriodHelper();
 

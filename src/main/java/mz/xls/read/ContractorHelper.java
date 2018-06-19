@@ -14,8 +14,10 @@ public class ContractorHelper extends HashMap<String, Contractor> {
 
         for (Row row : sheet) {
             if (flag) {
-                Contractor contractor = new Contractor(row);
-                this.put(contractor.getCode(), contractor);
+                if ((int) row.getCell(0).getNumericCellValue() != 0) {
+                    Contractor contractor = new Contractor(row);
+                    this.put(contractor.getCode(), contractor);
+                }
             } else {
                 String cellNum = row.getCell(0).getStringCellValue();
                 if (cellNum.equals("№")) flag = true;

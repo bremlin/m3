@@ -1,16 +1,15 @@
 package mz.xls.read;
 
 import mz.xls.objects.PrimaHelper;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 public class XLSReaderPrimavera {
 
     private PrimaHelper primaHelper;
 
-    public XLSReaderPrimavera(Workbook workbook) {
+    public XLSReaderPrimavera(Workbook workbook, boolean pvStandart) {
 
-        primaHelper = new PrimaHelper(workbook);
+        primaHelper = new PrimaHelper(workbook, pvStandart);
     }
 
     public FinPeriodHelper getFinPeriodHelper() {
